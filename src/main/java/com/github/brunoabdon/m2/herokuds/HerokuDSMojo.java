@@ -20,16 +20,19 @@ import org.apache.maven.project.MavenProject;
  * yaml pra configurar a base.</p>
  * 
  *  <p>A variável de ambiente {@code DATABASE_URL} deve ser setada na 
- *  propriedade do pom {@value #ENV_VARIABLE_DATABASE_URL}.</p>
+ *  propriedade do pom {@value #PROP_DATABASE_URL}.</p>
  */
 @Mojo(name="parse", defaultPhase=LifecyclePhase.VALIDATE)
 public class HerokuDSMojo extends AbstractMojo {
 
-
-    public static final String ENV_VARIABLE_DATABASE_URL = 
-        "heroku.DATABASE_URL";
+    public static final String PROP_DATABASE_URL = "herokuds.databas_url";
     private static final String POSTGRESQL_JDBC_PREFIX = "jdbc:postgresql://";
 
+    //@TODO make it configurable
+    private String databaseURLProperty = "herokuds.connectionURL";
+    private String usernameProperty = "herokuds.username";
+    private String passwordProperty = "herokuds.password";
+    
     @Parameter(defaultValue = "${project}")
 	private MavenProject project;
 
@@ -39,38 +42,28 @@ public class HerokuDSMojo extends AbstractMojo {
 		
 		final Properties properties = this.project.getProperties();
 		
-        //ensure the Heroku datasource is deployed before the JEE 
-        //application, so that the latter's persistence unit will be able 
-        //to find a suitable datasource
-        final String herokuDBUrl = 
-            properties.getProperty(ENV_VARIABLE_DATABASE_URL);
+        logger.info("Reading property " + PROP_DATABASE_URL);
+        final String herokuDBUrl =  properties.getProperty(PROP_DATABASE_URL);
         
-        logger.info("Lendo environment variable " + ENV_VARIABLE_DATABASE_URL);
-        logger.info("Lendo environment variable " + ENV_VARIABLE_DATABASE_URL);
-            
         if(herokuDBUrl == null) {
         	throw new MojoExecutionException(
-    			"Configure a env var " + ENV_VARIABLE_DATABASE_URL
+    			"Configure maven property " + PROP_DATABASE_URL
 			);
         }		
-		
-		
-        
-        logger.debug( "Criando URI da envvar");
-    	
+
 		try {
+	        logger.info("Parsing...");
 			final URI dbUri = new URI(herokuDBUrl);
     	    	
-	        logger.debug( "Lendo usuário e senha da envvar");
 	    	final String userInfo = dbUri.getUserInfo();
 	
 	    	if(userInfo == null) {
 	    		logger.error(
-					"Envvar de acesso ao banco não parece conter usuário e "
-					+ "senha. Duvido que vá funcionar. Abortando."
+					"Aborting: URI set on '" + PROP_DATABASE_URL + "' does not"
+			        + " contains user and password. Unlikely to work."
 				);
 	    		throw new MojoExecutionException(
-					"Envvar de acesso ao banco malformada"
+					"No user info on heroku database URI."
 				);
 	    	}
 	    	
@@ -81,16 +74,14 @@ public class HerokuDSMojo extends AbstractMojo {
 	            + ":" + dbUri.getPort()
 	            + dbUri.getPath()
 	            + (query != null ? "?" + query : "");
-	
-			logger.info("JDBC URL: " + dbUrl);
-			properties.setProperty("env.DATABASE_URL", dbUrl);
+
+			this.setProperty(logger, properties, databaseURLProperty, dbUrl);
 			
 	        final String[] splitted = userInfo.split(":");
 	        final String username = splitted[0];
-	        logger.info("Usuário: " + username + ". Senha: *****");
 	
-	        properties.setProperty("env.JDBC_DATABASE_USERNAME",username);
-	        properties.setProperty("env.JDBC_DATABASE_PASSWORD",splitted[1]);
+	        this.setProperty(logger, properties, usernameProperty, username);
+	        this.setProperty(logger, properties, passwordProperty,splitted[1]);
 	
 		} catch (final URISyntaxException e) {
 			throw new MojoExecutionException(
@@ -98,5 +89,14 @@ public class HerokuDSMojo extends AbstractMojo {
 			);
 		}
     }
-	
+    private void setProperty(
+            final Log logger,
+            final Properties properties,
+            final String propertyName,
+            final String propertyValue) {
+
+        logger.info("Setting property " + propertyName);
+        properties.setProperty(propertyName, propertyValue);
+        
+    }
 }
