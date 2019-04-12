@@ -25,7 +25,8 @@ import org.apache.maven.project.MavenProject;
 public class HerokuDSMojo extends AbstractMojo {
 
 
-    private static final String ENV_VARIABLE_DATABASE_URL = "DATABASE_URL";
+    private static final String ENV_VARIABLE_DATABASE_URL = 
+        "heroku.DATABASE_URL";
     private static final String POSTGRESQL_JDBC_PREFIX = "jdbc:postgresql://";
 
     @Parameter(defaultValue = "${project}")
@@ -35,11 +36,15 @@ public class HerokuDSMojo extends AbstractMojo {
 
 		final Log logger = getLog();
 		
+		final Properties properties = this.project.getProperties();
+		
         //ensure the Heroku datasource is deployed before the JEE 
         //application, so that the latter's persistence unit will be able 
         //to find a suitable datasource
-        final String herokuDBUrl = System.getenv(ENV_VARIABLE_DATABASE_URL);
+        final String herokuDBUrl = 
+            properties.getProperty(ENV_VARIABLE_DATABASE_URL);
         
+        logger.info("Lendo environment variable " + ENV_VARIABLE_DATABASE_URL);
         logger.info("Lendo environment variable " + ENV_VARIABLE_DATABASE_URL);
             
         if(herokuDBUrl == null) {
@@ -48,7 +53,7 @@ public class HerokuDSMojo extends AbstractMojo {
 			);
         }		
 		
-		final Properties properties = this.project.getProperties();
+		
         
         logger.debug( "Criando URI da envvar");
     	
