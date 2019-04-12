@@ -14,18 +14,19 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Plugin maven que cria propriedades na execucao maven com banco de dados, 
- * usuário e senha baseados na variáve de ambiente do heroku "DATABASE_URL".
+ * usuário e senha baseados na variável de ambiente do heroku "DATABASE_URL".
  * 
  * <p>Serve pra fazer o parse da variável do heroku e depois substituir num
  * yaml pra configurar a base.</p>
  * 
- *  <p>Não tá funcionando pq a variável de ambiente não tá chegando aqui.</p>
+ *  <p>A variável de ambiente {@code DATABASE_URL} deve ser setada na 
+ *  propriedade do pom {@value #ENV_VARIABLE_DATABASE_URL}.</p>
  */
 @Mojo(name="parse", defaultPhase=LifecyclePhase.VALIDATE)
 public class HerokuDSMojo extends AbstractMojo {
 
 
-    private static final String ENV_VARIABLE_DATABASE_URL = 
+    public static final String ENV_VARIABLE_DATABASE_URL = 
         "heroku.DATABASE_URL";
     private static final String POSTGRESQL_JDBC_PREFIX = "jdbc:postgresql://";
 
