@@ -8,9 +8,25 @@
 
   <packaging>maven-plugin</packaging>
 
-  <name>herokuds-maven-plugin Maven Mojo</name>
+  <name>HerokuDS Maven Plugin</name>
+  <description>A Maven Plugin for configuring exotic datasources on Heroku applications</description>
 
   <url>http://github.com/bunoabdon/herokuds-maven-plugin</url>
+
+    <developers>
+        <developer>
+            <name>Bruno Abdon</name>
+            <organization>Abdonia</organization>
+            <organizationUrl>https://github.com/abdonia</organizationUrl>
+        </developer>
+    </developers>    
+
+    <licenses>
+        <license>
+            <name>GNU General Public License, Version 3</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+        </license>
+    </licenses>  
 
 	<distributionManagement>
 	  <snapshotRepository>
@@ -22,7 +38,35 @@
 		<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	  </repository>
 	</distributionManagement>
-
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-gpg-plugin</artifactId>
+      <version>1.6</version>
+      <executions>
+        <execution>
+          <id>sign-artifacts</id>
+          <phase>verify</phase>
+          <goals>
+            <goal>sign</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+	<plugin>
+	  <groupId>org.sonatype.plugins</groupId>
+	  <artifactId>nexus-staging-maven-plugin</artifactId>
+	  <version>1.6.7</version>
+	  <extensions>true</extensions>
+	  <configuration>
+		 <serverId>ossrh</serverId>
+		 <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		 <autoReleaseAfterClose>true</autoReleaseAfterClose>
+	  </configuration>
+	</plugin>
+  </plugins>
+</build>
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -41,6 +85,12 @@
 	    <version>2.2.1</version>
 	</dependency>	
   </dependencies>
+    <scm>
+    	<url>https://github.com/brunoabdon/herokuds-maven-plugin.git</url>
+        <connection>scm:git:git://github.com/brunoabdon/herokuds-maven-plugin.git</connection>
+        <developerConnection>scm:git:git@github.com:brunoabdon/herokuds-maven-plugin.git</developerConnection>
+    </scm>  
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>  
