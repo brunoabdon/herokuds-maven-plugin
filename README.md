@@ -1,6 +1,6 @@
 # herokuds-maven-plugin
 ## Uso:
-### Primeiro, consutrua a instale:
+### Primeiro, consutrua e instale:
      $mvn clean package isntall
 ### Depois use mesmo:
      <plugin>
