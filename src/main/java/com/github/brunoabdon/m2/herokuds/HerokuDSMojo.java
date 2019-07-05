@@ -13,7 +13,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 /**
- * Plugin maven que cria propriedades na execucao maven com banco de dados, 
+ * Plugin maven que cria propriedades na execução maven com banco de dados, 
  * usuário e senha baseados na variável de ambiente do heroku "DATABASE_URL".
  * 
  * <p>Serve pra fazer o parse da variável do heroku e depois substituir num
@@ -41,10 +41,10 @@ public class HerokuDSMojo extends AbstractMojo {
 		final Log logger = getLog();
 		
 		final Properties properties = this.project.getProperties();
-		
+
         logger.info("Reading property " + PROP_DATABASE_URL);
         final String herokuDBUrl =  properties.getProperty(PROP_DATABASE_URL);
-        
+
         if(herokuDBUrl == null) {
         	throw new MojoExecutionException(
     			"Configure maven property " + PROP_DATABASE_URL
@@ -89,7 +89,8 @@ public class HerokuDSMojo extends AbstractMojo {
 			);
 		}
     }
-    private void setProperty(
+
+	private void setProperty(
             final Log logger,
             final Properties properties,
             final String propertyName,
