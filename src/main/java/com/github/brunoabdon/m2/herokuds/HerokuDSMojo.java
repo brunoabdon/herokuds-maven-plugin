@@ -25,7 +25,7 @@ import org.apache.maven.project.MavenProject;
 @Mojo(name="parse", defaultPhase=LifecyclePhase.PROCESS_RESOURCES)
 public class HerokuDSMojo extends AbstractMojo {
 
-    public static final String PROP_DATABASE_URL = "herokuds.databas_url";
+    public static final String PROP_DATABASE_URL = "herokuds.database_url";
     private static final String POSTGRESQL_JDBC_PREFIX = "jdbc:postgresql://";
 
     //@TODO make it configurable
