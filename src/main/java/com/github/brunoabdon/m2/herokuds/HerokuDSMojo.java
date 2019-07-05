@@ -22,7 +22,7 @@ import org.apache.maven.project.MavenProject;
  *  <p>A variável de ambiente {@code DATABASE_URL} deve ser setada na 
  *  propriedade do pom {@value #PROP_DATABASE_URL}.</p>
  */
-@Mojo(name="parse", defaultPhase=LifecyclePhase.VALIDATE)
+@Mojo(name="parse", defaultPhase=LifecyclePhase.PROCESS_RESOURCES)
 public class HerokuDSMojo extends AbstractMojo {
 
     public static final String PROP_DATABASE_URL = "herokuds.databas_url";
