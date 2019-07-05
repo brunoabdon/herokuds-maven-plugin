@@ -7,16 +7,14 @@
      $export DATABASE_URL=postgresql://usuario:senha@localhost:5432/superBancoDeDados
      
 ### Depois use mesmo:
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     
-    <herokuds.databas_url>${env.DATABASE_URL}</herokuds.databas_url>
+        <herokuds.databas_url>${env.DATABASE_URL}</herokuds.databas_url>
     
-  </properties>
-
-
+     </properties>
 
      <plugin>
         <groupId>com.github.brunoabdon.m2.herokuds</groupId>
