@@ -1,8 +1,13 @@
 package com.github.brunoabdon.m2.herokuds;
 
+import static java.util.regex.Pattern.compile;
+import static java.util.regex.Pattern.matches;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -84,9 +89,15 @@ public class HerokuDSMojo extends AbstractMojo {
 	        this.setProperty(logger, properties, passwordProperty,splitted[1]);
 	
 		} catch (final URISyntaxException e) {
-			throw new MojoExecutionException(
-				"URI mal formada " + herokuDBUrl
-			);
+			
+			final Pattern pattern = compile("\\$\\{env.([^=]+)\\}");
+			final Matcher matcher = pattern.matcher(herokuDBUrl);
+			
+			final String msg = 
+				matcher.matches()
+					? "Esqueceu de setar a env var " + matcher.group(1)
+					: "URI mal formada " + herokuDBUrl;
+			throw new MojoExecutionException(msg);
 		}
     }
 
