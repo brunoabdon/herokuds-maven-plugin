@@ -1,7 +1,6 @@
 package com.github.brunoabdon.m2.herokuds;
 
 import static java.util.regex.Pattern.compile;
-import static java.util.regex.Pattern.matches;
 
 import java.net.URI;
 import java.net.URISyntaxException;
